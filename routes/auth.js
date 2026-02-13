@@ -20,10 +20,10 @@ router.post('/register', async (req, res) => {
         return res.status(400).send('La contraseña debe tener al menos 8 caracteres.');
     }
     // 4. Verificar si el usuario ya existe
-    const checkSql = 'SELECT * FROM usuarios WHERE username = ? OR email = ?';
+    const checkSql = 'SELECT * FROM usuarios WHERE username = $1 OR email = $2';
     db.query(checkSql, [username, email], async (err, results) => {
         if (err) return res.status(500).send('Error en el servidor');
-        if (results.length > 0) {
+        if (results.rows.length > 0) {
             return res.status(400).send('El usuario o el correo ya están registrados.');
         }
         try {
@@ -31,9 +31,9 @@ router.post('/register', async (req, res) => {
             const hashedPw = await bcrypt.hash(password, 10);
 
             // 6. Insertar en la base de datos con el campo 'rol'
-            const insertSql = 'INSERT INTO usuarios (nombre, apellido, email, username, password, rol) VALUES (?, ?, ?, ?, ?, ?)';
+            const insertSql = 'INSERT INTO usuarios (nombre, apellido, email, username, password, rol) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id';
 
-            db.query(insertSql, [nombre, apellido, email, username, hashedPw, rolAsignado], (err) => {
+            db.query(insertSql, [nombre, apellido, email, username, hashedPw, rolAsignado], (err, insertResult) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send('Error al guardar en la base de datos');
@@ -43,7 +43,8 @@ router.post('/register', async (req, res) => {
                 res.status(200).json({
                     message: 'Registro exitoso',
                     nombre: nombre,
-                    rol: rolAsignado
+                    rol: rolAsignado,
+                    id: insertResult.rows[0].id
                 });
             });
         } catch (error) {
@@ -55,14 +56,14 @@ router.post('/register', async (req, res) => {
 // --- Inicio de Sesión ---
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const sql = 'SELECT * FROM usuarios WHERE username = ?';
+    const sql = 'SELECT * FROM usuarios WHERE username = $1';
 
     db.query(sql, [username], async (err, results) => {
         if (err) return res.status(500).send('Error en el servidor');
-        if (results.length === 0) {
+        if (results.rows.length === 0) {
             return res.status(401).send('Usuario no encontrado');
         }
-        const user = results[0];
+        const user = results.rows[0];
         try {
             const isMatch = await bcrypt.compare(password, user.password);
 

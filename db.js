@@ -1,28 +1,24 @@
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 
 // Configuración de conexión usando variables de entorno
-// Render no ofrece MySQL gratis, pero esto permite conectar a una externa (Railway, Clever Cloud, etc)
-const connection = mysql.createConnection({
+const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'mi_ecommerce',
-    port: process.env.DB_PORT || 3306
+    port: process.env.DB_PORT || 5432,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-connection.connect((err) => {
+// Verificación de conexión
+pool.connect((err, client, release) => {
     if (err) {
-        console.error("Error conectando a la base de datos:", err);
-        return;
+        return console.error('Error adquiriendo cliente', err.stack);
     }
-    console.log('Conectado a la base de datos MySQL');
+    console.log('Conectado a la base de datos PostgreSQL');
+    release();
 });
 
-// Mantener la conexión viva (ping cada hora) para evitar timeout de servidores gratuitos
-setInterval(() => {
-    connection.query('SELECT 1', (err) => {
-        if (err) console.error('Error en ping DB:', err);
-    });
-}, 3600000);
-
-module.exports = connection;
+module.exports = {
+    query: (text, params, callback) => pool.query(text, params, callback)
+};
