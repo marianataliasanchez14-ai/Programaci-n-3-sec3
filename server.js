@@ -21,14 +21,20 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const pgSession = require('connect-pg-simple')(session);
+
 // Config sesión (usar variable para SECRET en producción es buena práctica)
 app.use(session({
+  store: new pgSession({
+    pool: require('./db').pool, // Reutilizamos el pool de db.js
+    tableName: 'session'   // Nombre de tabla opcional, por defecto 'session'
+  }),
   secret: process.env.SESSION_SECRET || 'tu_secreto',
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === 'production', // true solo si hay HTTPS
-    maxAge: 1000 * 60 * 60 * 24 // 1 día
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
   }
 }));
 

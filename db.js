@@ -20,5 +20,6 @@ pool.connect((err, client, release) => {
 });
 
 module.exports = {
-    query: (text, params, callback) => pool.query(text, params, callback)
+    query: (text, params, callback) => pool.query(text, params, callback),
+    pool: pool
 };
