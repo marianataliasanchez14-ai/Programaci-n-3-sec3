@@ -1,0 +1,331 @@
+/* ===========================================
+   1. ESTILOS GLOBALES
+   =========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* ===========================================
+   2. FONDOS SEGÚN LA PÁGINA
+   =========================================== */
+
+/* Páginas de Cliente: Llevan el fondo de patillas */
+.login-page,
+.register-page,
+.dashboard-page,
+.cart-page {
+    background: url('fondo.jpg.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+/* El Login y Registro centran el contenido verticalmente */
+.login-page,
+.register-page {
+    align-items: center;
+}
+
+/* El Dashboard y Carrito alinean arriba para permitir scroll */
+.dashboard-page,
+.cart-page {
+    align-items: flex-start;
+    padding: 40px 15px;
+}
+
+/* PANEL DE ADMIN: Fondo sólido rosado (SIN PATILLAS) */
+.admin-body {
+    background-color: #fce4ec !important;
+    background-image: none !important;
+    min-height: 100vh;
+}
+
+/* ===========================================
+   3. CONTENEDORES (Login vs Dashboard)
+   =========================================== */
+
+/* Cuadro Blanco Redondeado para Login/Registro (Como tu foto 5) */
+.form-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    padding: 35px;
+    border-radius: 40px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Burbuja Grande para Dashboard y Carrito */
+.catalog-card {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(15px);
+    border-radius: 40px;
+    padding: 40px;
+    width: 100%;
+    max-width: 1150px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    text-align: center;
+}
+
+/* ===========================================
+   4. ELEMENTOS DEL DASHBOARD (Catálogo)
+   =========================================== */
+
+.talla-info {
+    background: #fff9c4;
+    color: #5d4037;
+    padding: 15px 25px;
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 850px;
+    font-size: 1rem;
+    border-left: 6px solid #fbc02d;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.producto-item {
+    background: white;
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.producto-item:hover {
+    transform: translateY(-10px);
+}
+
+/* Efecto Zoom Centrado */
+.img-container {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: #fcfcfc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.img-container img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.producto-item:hover img {
+    transform: scale(1.15);
+}
+
+/* ===========================================
+   5. BOTONES E INPUTS
+   =========================================== */
+
+/* Botón Rosado (Login/Comprar) */
+.btn-entrar,
+.btn-comprar {
+    background: #e91e63;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.btn-entrar:hover,
+.btn-comprar:hover {
+    background: #c2185b;
+}
+
+/* Inputs del Login */
+.form-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+/* Botón Secundario (Salir/Carrito) */
+.btn-secondary {
+    background: white;
+    color: #6c5ce7;
+    border: 2px solid #6c5ce7;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: white;
+    color: #6c5ce7;
+    border: 2px solid #6c5ce7;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+
+
+/* ============
+   ADMIN PANEL
+   =========== */
+
+.admin-body {
+    background-color: #fce4ec !important;
+    background-image: none !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    /* Centra todo el contenido */
+    padding: 40px 20px;
+}
+
+.admin-container {
+    width: 90%;
+    max-width: 900px;
+    /* Evita que se vea gigante */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Títulos centrados */
+.admin-nav,
+header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* La Tarjeta Blanca Centralizada */
+.admin-card {
+    background: white !important;
+    padding: 30px 20px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: none !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* FORMULARIO VERTICAL: Título arriba, Input abajo */
+.form-grid-vertical {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    text-align: left;
+}
+
+.input-block {
+    display: flex;
+    flex-direction: column;
+    /* Esto pone el título arriba del input */
+    gap: 8px;
+}
+
+.input-block label {
+    font-weight: 600;
+    color: #222121;
+    font-size: 0.9rem;
+}
+
+.input-block input,
+.input-block textarea {
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fdfdfd;
+    width: 100%;
+}
+
+/* Botón Guardar Producto (Rosado Patilla) */
+.btn-guardar {
+    grid-column: span 2;
+    /* Ocupa todo el ancho abajo */
+    background: #e91e63;
+    /* El rosa de tu login */
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-guardar:hover {
+    background: #c2185b;
+    transform: scale(1.02);
+}
+
+/* Buscador Centralizado */
+.search-box-container {
+    background: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin: 10px auto;
+    width: fit-content;
+}
+
+#busquedaCodigo {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    width: 250px;
+}
+
+.admin-table {
+    width: 100% !important;
+    /* Obliga a la tabla a ocupar todo el fondo blanco */
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 15px 10px;
+    /* Espacio cómodo para el texto */
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    /* Línea divisoria suave */
+}
+
+/* Para que la columna de 'Nombre' sea la que más espacio ocupe */
+.admin-table td:nth-child(3) {
+    width: 40%;
+}
