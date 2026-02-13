@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Patilla Shops</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="register-page">
+    <div class="form-card">
+        <h1>¡Bienvenido!</h1>
+        <p>Crea tu cuenta para empezar</p>
+
+        <form id="registerForm">
+            <div class="input-group">
+                <input type="text" id="nombre" placeholder="Nombre" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="apellido" placeholder="Apellido" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Correo electrónico" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Nombre de usuario" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Contraseña (mín. 8 caracteres)" required
+                    minlength="8">
+            </div>
+
+            <div id="mensajeError" class="error-text"></div>
+
+            <button type="submit" class="btn-entrar">Registrarse</button>
+        </form>
+
+        <div class="register-link">
+            <p>¿Ya tienes cuenta? <a href="/index.html">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        const mensajeDiv = document.getElementById('mensajeError');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                email: document.getElementById('email').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+
+                    // 1. Guardamos el nombre del nuevo usuario
+                    localStorage.setItem('usuarioNombre', result.nombre);
+
+                    // 2. LIMPIEZA: Borramos cualquier carrito previo
+                    localStorage.removeItem('carrito');
+
+                    // 3. Redirección por Rol
+                    if (result.rol === 'admin') {
+                        window.location.href = '/admin.html';
+                    } else {
+                        window.location.href = '/dashboard.html';
+                    }
+                } else {
+                    const errorText = await response.text();
+                    mensajeDiv.style.color = "#ff5252";
+                    mensajeDiv.innerText = errorText;
+                }
+            } catch (error) {
+                mensajeDiv.style.color = "#ff5252";
+                mensajeDiv.innerText = "Error de conexión con el servidor";
+            }
+        });
+    </script>
+</body>
+
+</html>

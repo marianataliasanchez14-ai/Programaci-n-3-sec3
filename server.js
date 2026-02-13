@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Rutas
 app.get('/', (req, res) => {
-  res.redirect('/auth/login.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.use('/auth', authRoutes);
