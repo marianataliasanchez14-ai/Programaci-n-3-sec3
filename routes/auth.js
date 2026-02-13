@@ -1,8 +1,7 @@
-
 const express = require('express');
-const bcrypt = require('bcrypt');
-const db = require('../db');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const db = require('../db');
 
 // --- Registro de Usuario ---
 router.post('/register', async (req, res) => {
@@ -89,12 +88,10 @@ router.post('/login', async (req, res) => {
     });
 });
 
-// --- Cierre de Sesión ---
+// --- Logout ---
 router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        res.clearCookie('connect.sid');
-        res.redirect('/index.html?logout=success');
-    });
+    req.session.destroy();
+    res.send('Sesión cerrada');
 });
 
 module.exports = router;

@@ -1,22 +1,30 @@
-const { Pool } = require('pg');
+const poolConfig = process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== ""
+    ? { connectionString: process.env.DATABASE_URL.trim() }
+    : {
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'postgres',
+        password: process.env.DB_PASSWORD || 'password',
+        database: process.env.DB_NAME || 'mi_ecommerce',
+        port: process.env.DB_PORT || 5432,
+    };
 
-// Configuración de conexión usando variables de entorno
-const pool = new Pool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'mi_ecommerce',
-    port: process.env.DB_PORT || 5432,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+if (process.env.DATABASE_URL) {
+    console.log('Usando DATABASE_URL para la conexión.');
+} else {
+    console.log(`Usando variables individuales. Host: ${poolConfig.host}, DB: ${poolConfig.database}`);
+}
+
+poolConfig.ssl = process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false;
+
+const pool = new Pool(poolConfig);
 
 // Verificación de conexión
-pool.connect((err, client, release) => {
+pool.query('SELECT NOW()', (err, res) => {
     if (err) {
-        return console.error('Error adquiriendo cliente', err.stack);
+        console.error('❌ ERROR de conexión a la DB:', err.message);
+    } else {
+        console.log('✅ Base de datos conectada exitosamente a las:', res.rows[0].now);
     }
-    console.log('Conectado a la base de datos PostgreSQL');
-    release();
 });
 
 module.exports = {

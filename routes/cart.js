@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
+// Middleware para verificar si el usuario está logueado
 function estaLogueado(req, res, next) {
-    if (req.session.user) return next();
-    res.status(401).send('Debes iniciar sesión para usar el carrito');
+    if (req.session.user) {
+        return next();
+    }
+    res.status(401).send('Inicia sesión para usar el carrito');
 }
 
 // 1. AGREGAR AL CARRITO

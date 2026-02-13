@@ -1,26 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
 const multer = require('multer');
-const path = require('path');
+const db = require('../db');
 
-// 1. Configuración de Multer (Almacenamiento)
+// Configuración de multer para subir imágenes
 const storage = multer.diskStorage({
-    destination: 'uploads/',
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
     filename: (req, file, cb) => {
-        // Esto genera un nombre único usando la fecha actual + la extensión original
-        cb(null, Date.now() + path.extname(file.originalname));
+        cb(null, Date.now() + '-' + file.originalname);
     }
 });
-
 const upload = multer({ storage: storage });
 
-// 2. Middleware para proteger (Solo Admin)
+// Middleware para verificar si es admin
 function esAdmin(req, res, next) {
     if (req.session.user && req.session.user.rol === 'admin') {
         return next();
     }
-    res.status(403).send('Acceso denegado');
+    res.status(403).send('Acceso denegado: Se requieren permisos de administrador');
 }
 
 // 3. RUTA PARA VER PRODUCTOS (GET)
