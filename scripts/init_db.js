@@ -31,7 +31,8 @@ async function initDB() {
 
         console.log('¡Tablas creadas exitosamente!');
     } catch (err) {
-        console.error('Error inicializando DB:', err);
+        // Ignorar error si la tabla ya existe, o loguearlo
+        console.error('Nota: Error inicializando DB (puede que las tablas ya existan):', err.message);
     } finally {
         await client.end();
     }
