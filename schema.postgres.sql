@@ -1,5 +1,5 @@
 -- Tabla de Usuarios
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE usuarios (
 );
 
 -- Tabla de Productos
-CREATE TABLE productos (
+CREATE TABLE IF NOT EXISTS productos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     codigo VARCHAR(50) UNIQUE NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE productos (
 );
 
 -- Tabla del Carrito de Compras
-CREATE TABLE carrito (
+CREATE TABLE IF NOT EXISTS carrito (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
     producto_id INTEGER REFERENCES productos(id) ON DELETE CASCADE,
