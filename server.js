@@ -44,6 +44,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Rutas
+app.get('/', (req, res) => {
+  res.redirect('/auth/login.html');
+});
+
 app.use('/auth', authRoutes);
 app.use('/productos', productsRoutes); // Usar /productos consistentemente
 app.use('/cart', cartRoutes);
